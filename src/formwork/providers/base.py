@@ -14,7 +14,15 @@ from pydantic import BaseModel
 
 from formwork.report import Usage
 
-__all__ = ["ModelRequest", "Model", "AsyncModel"]
+__all__ = ["ModelRequest", "Model", "AsyncModel", "ProviderError"]
+
+
+class ProviderError(Exception):
+    """The model could not be reached, or answered with something unusable.
+
+    Deliberately not an ``FormworkError``: those carry a ``Report`` and mean
+    the loop ran and failed on its own terms. A missing API key is not that.
+    """
 
 
 @dataclass(frozen=True, slots=True)

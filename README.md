@@ -138,7 +138,25 @@ assert model.requested_fields == [
 
 ## Bring your own model
 
-The interface is one method. Adapting a provider is a twenty-line job:
+One adapter ships today:
+
+```bash
+pip install "formwork[gemini]"
+```
+
+```python
+from formwork.providers.gemini import Gemini
+
+plan, report = generate(WorkoutPlan, ctx, Gemini())   # reads GEMINI_API_KEY
+```
+
+It converts each schema into the OpenAPI subset Gemini's `response_schema`
+accepts — inlining `$ref`s and dropping `additionalProperties`, both of which
+are 400s otherwise. Anything it drops is still enforced by the engine when the
+response comes back.
+
+For anything else, the interface is one method. Adapting a provider is a
+twenty-line job:
 
 ```python
 class MyModel:
@@ -174,7 +192,9 @@ plan, report = session.finish()
 ## Roadmap
 
 - [x] Field roles, rules, deterministic + targeted repair, sans-IO session, test doubles
-- [ ] Provider adapters (Anthropic, OpenAI, Gemini, Ollama)
+- [x] Gemini adapter, verified live — including that the provider accepts the
+      narrowed schema a targeted repair generates on the fly
+- [ ] Further provider adapters (Anthropic, OpenAI, Ollama)
 - [ ] Grammar backend for `chosen` fields — enforce closed sets at decode time instead of validating after
 - [ ] **Benchmark**: valid-on-first-try rate and tokens-to-convergence against a plain-prompt and an Instructor baseline, across three domains. Until this exists, treat the efficiency claims in this README as untested.
 - [ ] `formwork.contrib` with worked specs for scheduling, meal planning and budgeting

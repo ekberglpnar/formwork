@@ -85,6 +85,15 @@ class WeeklyPlan(Spec):
     set_range: Annotated[
         tuple[int, int], computed(weekly_set_range, describe="total sets across the week")
     ]
+    # A live run against Gemini returned five movements where four were
+    # allowed, and it was right to: the rule text said "at most the configured
+    # number" without ever saying what the number was. If a limit matters to
+    # the model, it has to reach the model as a value, and a computed field is
+    # how values get there. Rule prose alone is not a constraint.
+    max_movements: Annotated[
+        int,
+        computed(lambda p: p.max_per_day, describe="hard ceiling on the movement count"),
+    ]
 
     movements: Annotated[
         list[Movement],
@@ -112,13 +121,13 @@ class WeeklyPlan(Spec):
 
     # So is a list that ran long.
     @rule(
-        "At most the configured number of movements.",
+        "Return no more movements than max_movements, stated above.",
         fields=["movements"],
         repair=repair.truncate("movements", lambda p: p.max_per_day),
     )
     def not_too_many(self, profile: Profile) -> str | None:
-        if len(self.movements) > profile.max_per_day:
-            return f"{len(self.movements)} movements, allowed {profile.max_per_day}"
+        if len(self.movements) > self.max_movements:
+            return f"{len(self.movements)} movements, allowed {self.max_movements}"
         return None
 
     # This one is a judgement call, so it goes back to the model — but only
