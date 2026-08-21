@@ -8,8 +8,13 @@ genuinely being asked for.
 
 from __future__ import annotations
 
+import sys
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Annotated, Any
+
+# The benchmark lives at the repo root, outside the installed package.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import pytest
 from pydantic import BaseModel, Field

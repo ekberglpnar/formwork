@@ -58,6 +58,8 @@ class Session(Generic[S]):
         max_attempts: int = DEFAULT_MAX_ATTEMPTS,
         prompt_builder: PromptBuilder | None = None,
         system: str | None = None,
+        targeted_repair: bool = True,
+        use_declared_repairs: bool = True,
     ) -> None:
         if max_attempts < 1:
             raise ValueError("max_attempts must be at least 1")
@@ -65,6 +67,12 @@ class Session(Generic[S]):
         self.spec = spec
         self.ctx = ctx
         self.max_attempts = max_attempts
+        # Both default on. They exist to be switched off by the benchmark, so
+        # that a measured gain can be attributed to one mechanism rather than
+        # to "the library"; turning them off in production only makes the loop
+        # more expensive.
+        self.targeted_repair = targeted_repair
+        self.use_declared_repairs = use_declared_repairs
         self.prompts = prompt_builder or PromptBuilder()
         self.system = system if system is not None else self.prompts.system(spec)
 
@@ -164,6 +172,9 @@ class Session(Generic[S]):
         declare its fields still works, it just costs a full regeneration. The
         library should not refuse to run because someone was in a hurry.
         """
+        if not self.targeted_repair:
+            return self.spec.model_owned_fields()
+
         owned = set(self.spec.model_owned_fields())
         implicated = tuple(
             dict.fromkeys(
@@ -203,11 +214,15 @@ class Session(Generic[S]):
             self._settle(candidate)
             return
 
-        strategies = {
-            rule.name: rule.repair
-            for rule in type(candidate).__formwork_rules__
-            if rule.repair is not None
-        }
+        strategies = (
+            {
+                rule.name: rule.repair
+                for rule in type(candidate).__formwork_rules__
+                if rule.repair is not None
+            }
+            if self.use_declared_repairs
+            else {}
+        )
         patched, fired = repair_module.apply(candidate, result.violations, self.ctx, strategies)
 
         if fired:
@@ -249,6 +264,8 @@ def generate(
     candidates: int = 1,
     prompt_builder: PromptBuilder | None = None,
     system: str | None = None,
+    targeted_repair: bool = True,
+    use_declared_repairs: bool = True,
 ) -> tuple[S, Report]:
     """Produce an object satisfying every rule, or raise.
 
@@ -265,6 +282,8 @@ def generate(
             max_attempts=max_attempts,
             prompt_builder=prompt_builder,
             system=system,
+            targeted_repair=targeted_repair,
+            use_declared_repairs=use_declared_repairs,
         )
         while (request := session.next_request()) is not None:
             raw, usage = model.generate_structured(request)
@@ -283,6 +302,8 @@ async def agenerate(
     candidates: int = 1,
     prompt_builder: PromptBuilder | None = None,
     system: str | None = None,
+    targeted_repair: bool = True,
+    use_declared_repairs: bool = True,
 ) -> tuple[S, Report]:
     """``generate``, awaited. Candidates run sequentially, not concurrently:
     a later candidate is only worth paying for if the earlier ones were poor,
@@ -296,6 +317,8 @@ async def agenerate(
             max_attempts=max_attempts,
             prompt_builder=prompt_builder,
             system=system,
+            targeted_repair=targeted_repair,
+            use_declared_repairs=use_declared_repairs,
         )
         while (request := session.next_request()) is not None:
             raw, usage = await model.generate_structured(request)
