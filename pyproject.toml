@@ -43,8 +43,13 @@ packages = ["src/formwork"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+# Live tests are opt-in. Without this, anyone who filled in .env to run the
+# benchmark would spend real quota every time they ran the test suite, which is
+# not something a contributor should discover from their billing page.
+# Run them deliberately with: pytest -m live
+addopts = "-m 'not live'"
 markers = [
-  "live: hits a real provider; costs money and needs an API key. Skipped without one.",
+  "live: hits a real provider; costs money and needs an API key. Opt in with -m live.",
 ]
 
 [tool.ruff]
@@ -58,3 +63,11 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 python_version = "3.11"
 strict = true
 packages = ["formwork"]
+
+# google-genai is an optional extra and ships no type information. The library
+# must type-check whether or not it is installed, which is what CI does: it
+# installs [dev] only. _load_sdk() already types the SDK as Any, so nothing is
+# lost by silencing the import here.
+[[tool.mypy.overrides]]
+module = ["google", "google.*"]
+ignore_missing_imports = true

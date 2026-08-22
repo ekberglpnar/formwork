@@ -879,6 +879,15 @@ Useful commands:
 .venv/bin/mypy
 ```
 
+The suite is offline and takes about a second. Tests that call a real provider
+are marked `live` and excluded by default, so filling in `.env` for the
+benchmark will not quietly start spending quota on every test run. Opt in
+deliberately:
+
+```bash
+.venv/bin/python -m pytest -m live -q     # costs money, needs GEMINI_API_KEY
+```
+
 The project CI targets:
 
 ```text
