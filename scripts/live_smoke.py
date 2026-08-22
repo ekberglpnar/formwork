@@ -37,7 +37,7 @@ from workout import Profile, WeeklyPlan  # noqa: E402
 
 from formwork import ConstraintError, Session, generate  # noqa: E402
 from formwork.providers import JsonlRecorder, ProviderError  # noqa: E402
-from formwork.providers.gemini import Gemini  # noqa: E402
+from formwork.providers.gemini import DEFAULT_MODEL, Gemini  # noqa: E402
 
 RECORDINGS = ROOT / "bench" / "recordings"
 
@@ -150,7 +150,7 @@ def main() -> int:
         print("GEMINI_API_KEY is empty — fill in .env first.")
         return 1
 
-    model_name = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+    model_name = os.environ.get("GEMINI_MODEL") or DEFAULT_MODEL
     print(f"model: {model_name}")
     print(f"recordings: {RECORDINGS}")
     print()

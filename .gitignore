@@ -29,6 +29,10 @@ Thumbs.db
 .env.*
 !.env.example
 
-# Benchmark logs; raw result rows are committed, stderr streams are not
-bench/results/*.err
-bench/results/*.log
+# Benchmark output is a local artifact, not part of the repo
+bench/results/
+
+# Local notes for coding assistants
+CLAUDE.md
+AGENTS.md
+.claude/

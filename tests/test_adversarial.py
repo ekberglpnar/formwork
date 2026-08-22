@@ -9,9 +9,9 @@ from __future__ import annotations
 
 import contextlib
 
+from conftest import WorkoutPlan
 from formwork import FormworkError, generate
 from formwork.providers import Chaos, Recording, Scripted
-from conftest import WorkoutPlan
 
 BASELINE = {
     "exercises": [

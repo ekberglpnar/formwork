@@ -9,7 +9,7 @@ have to be kept in agreement by hand.
 
 from __future__ import annotations
 
-from typing import Annotated, Any, ClassVar, Self, get_args, get_origin
+from typing import Annotated, Any, ClassVar, Self
 
 from pydantic import BaseModel, ConfigDict, create_model
 
@@ -168,11 +168,3 @@ def _redeclare(cls: type[BaseModel], name: str, spec: FieldSpec | None) -> tuple
         rebuilt = info
 
     return (annotation, rebuilt)
-
-
-def item_type_of(annotation: Any) -> Any:
-    """Element type of a list annotation, or None. Used by repair strategies."""
-    if get_origin(annotation) in (list, tuple):
-        args = get_args(annotation)
-        return args[0] if args else None
-    return None

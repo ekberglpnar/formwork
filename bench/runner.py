@@ -19,11 +19,11 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from formwork.providers.base import Model, ModelRequest, ProviderError
-from formwork.report import Usage
 from bench.arms import ARM_ORDER, RunOutcome, run_arm
 from bench.errors import QuotaWall
 from bench.tasks import DIFFICULTIES, TASKS
+from formwork.providers.base import Model, ModelRequest, ProviderError
+from formwork.report import Usage
 
 _TRANSIENT = ("429", "RESOURCE_EXHAUSTED", "503", "UNAVAILABLE", "500", "INTERNAL", "504")
 

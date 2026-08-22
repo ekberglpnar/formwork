@@ -13,7 +13,4 @@ class QuotaWall(RuntimeError):
     are not dropped evenly: arms that make more calls have more chances to hit
     the wall, so a sweep that grinds on past a hard quota quietly deletes the
     expensive arms' data and then reports what is left as a comparison.
-
-    That is not hypothetical. The first full run of this benchmark lost 13% of
-    the one-shot arm and 35% of a three-call arm before anyone noticed.
     """

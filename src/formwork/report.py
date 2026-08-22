@@ -56,10 +56,9 @@ class Attempt:
     def ok(self) -> bool:
         """Did the model's output need nothing at all?
 
-        A deterministic repair counts against this. It rescued the run, but the
-        output that arrived was still wrong, and ``valid_first_try`` is the
-        number the benchmark reports — flattering it here would make the
-        library's own headline metric a lie.
+        A deterministic repair counts against this: it rescued the run, but the
+        output that arrived was still wrong. ``valid_first_try`` is the number
+        the benchmark reports, so it must not be flattered here.
         """
         return not (self.structural_errors or self.violations or self.repaired_by)
 

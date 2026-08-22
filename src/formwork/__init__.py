@@ -17,7 +17,7 @@
 """
 
 from formwork.engine import Session, agenerate, generate
-from formwork.errors import FormworkError, ConstraintError, StructuralError
+from formwork.errors import ConstraintError, FormworkError, StructuralError
 from formwork.fields import FieldSpec, Role, chosen, computed, generated
 from formwork.prompt import PromptBuilder
 from formwork.providers.base import AsyncModel, Model, ModelRequest

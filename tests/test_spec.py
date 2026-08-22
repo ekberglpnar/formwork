@@ -5,8 +5,8 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from formwork import Role
 from conftest import PlanExercise, WorkoutPlan
+from formwork import Role
 
 
 def test_roles_are_read_off_the_annotations():

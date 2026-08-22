@@ -16,12 +16,12 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from formwork.providers.base import ProviderError
 from bench.arms import ARM_ORDER
 from bench.errors import QuotaWall
 from bench.report import render
 from bench.runner import Config, load_results, run_sweep, summarise_errors
 from bench.tasks import DIFFICULTIES, TASKS
+from formwork.providers.base import ProviderError
 
 ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / "bench" / "results"
@@ -75,9 +75,9 @@ def main(argv: list[str] | None = None) -> int:
         print("GEMINI_API_KEY is empty — fill in .env first.", file=sys.stderr)
         return 1
 
-    from formwork.providers.gemini import Gemini
+    from formwork.providers.gemini import DEFAULT_MODEL, Gemini
 
-    model_name = args.model or os.environ.get("GEMINI_MODEL") or "gemini-3.5-flash"
+    model_name = args.model or os.environ.get("GEMINI_MODEL") or DEFAULT_MODEL
     config = Config(
         model=model_name,
         temperature=args.temperature,

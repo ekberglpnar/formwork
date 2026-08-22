@@ -9,9 +9,9 @@ from __future__ import annotations
 
 import pytest
 
+from conftest import WorkoutPlan
 from formwork.providers.base import ProviderError
 from formwork.providers.gemini import to_gemini_schema
-from conftest import WorkoutPlan
 
 
 @pytest.fixture

@@ -18,9 +18,9 @@ from pathlib import Path
 
 import pytest
 
+from conftest import Ctx, WorkoutPlan
 from formwork import ConstraintError, Session
 from formwork import generate as run
-from conftest import Ctx, WorkoutPlan
 
 pytestmark = pytest.mark.live
 

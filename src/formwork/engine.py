@@ -33,7 +33,7 @@ from typing import Any, Generic, TypeVar
 from pydantic import ValidationError
 
 from formwork import repair as repair_module
-from formwork.errors import FormworkError, ConstraintError, StructuralError
+from formwork.errors import ConstraintError, FormworkError, StructuralError
 from formwork.prompt import PromptBuilder
 from formwork.providers.base import AsyncModel, Model, ModelRequest
 from formwork.report import Attempt, Report, Usage

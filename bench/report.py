@@ -110,8 +110,8 @@ def by_arm(outcomes: Iterable[RunOutcome], arms: Sequence[str] | None = None) ->
 
 # ── comparisons that the arms were designed to support ───────────────────
 
-# Each row differs from its predecessor in exactly one mechanism. Enforced by
-# tests/test_bench_fairness.py, not by good intentions.
+# Each row differs from its predecessor in exactly one mechanism, which
+# tests/test_bench_fairness.py enforces.
 PAIRS = [
     ("Field ownership, one attempt", "single", "own-only"),
     ("Field ownership, with retry", "naive-retry", "own-retry"),
@@ -134,10 +134,10 @@ def balance_check(outcomes: Sequence[RunOutcome]) -> tuple[bool, str]:
     so throttling deletes the expensive arms' runs preferentially — and the
     runs it deletes are the *hard* ones, the ones that needed a repair. Both
     biases push in the same direction: they flatter whichever arm retries most,
-    which here is the arm I wrote.
+    which is formwork's own arm.
 
-    So the report refuses rather than disclaims. A caveat under a table gets
-    screenshotted away; a missing table does not.
+    So the report refuses rather than disclaims: a caveat under a table is
+    easily dropped, a missing table is not.
     """
     per_arm: dict[str, list[RunOutcome]] = {}
     for outcome in outcomes:

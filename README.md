@@ -6,7 +6,7 @@
 pip install formwork
 ```
 
-> Status: **v0.1, alpha.** The core loop and its tests are real; the provider adapters and the benchmark are not written yet. See [Roadmap](#roadmap).
+> Status: **v0.1, alpha.** The core loop, its tests and the Gemini adapter are real. The benchmark is not, so the efficiency claims below are reasoned rather than measured. See [Roadmap](#roadmap).
 
 ---
 

@@ -2,7 +2,7 @@
 
 A benchmark written by the author of the thing being measured is worth exactly
 as much as its controls, so the controls are tests. Each one corresponds to a
-way I could have tilted the result without noticing.
+way the result could be tilted without anyone noticing.
 """
 
 from __future__ import annotations
@@ -55,7 +55,7 @@ def test_rules_read_the_context_not_the_object(task_name):
 def test_both_prompt_styles_state_the_same_rules_and_choices(task_name):
     """The restating arms differ in one section only.
 
-    A baseline with worse prose would measure my writing rather than the
+    A baseline with worse prose would measure the prompt rather than the
     mechanism, so everything except the constraint-delivery section must match
     byte for byte.
     """
@@ -105,9 +105,8 @@ def test_every_reported_comparison_differs_in_exactly_one_mechanism():
     """The load-bearing control.
 
     If a pair differs in two factors, the row attributing its gain to one of
-    them is wrong. This caught a real error: declared repairs fire *within* an
-    attempt, so they are live even in a one-shot arm, and the original
-    ``own-only`` had them enabled.
+    them is wrong. The subtle case is declared repairs: they fire *within* an
+    attempt, so they are live even in a one-shot arm.
     """
     factors = ("ownership", "single", "targeted", "deterministic")
 
@@ -156,10 +155,9 @@ def test_the_scorer_is_the_same_function_for_every_arm(task_name):
 
 
 def test_the_report_refuses_data_with_lopsided_dropouts():
-    """The guard that turned a wasted run into a permanent control.
-
-    A real sweep lost 13% of the one-shot arm and 35% of a three-call arm to a
-    rate limit. Rendered as a table it would have shown formwork winning.
+    """10% errors on the one-shot arm against 35% on the retrying one is the
+    shape a rate limit produces, and rendered as a table it would show formwork
+    winning for a reason that has nothing to do with formwork.
     """
     outcomes = [
         *_runs("single", n=20, errors=2),

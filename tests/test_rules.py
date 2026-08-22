@@ -6,8 +6,8 @@ from typing import Annotated
 
 import pytest
 
-from formwork import Spec, Violation, generated, rule, soft
 from conftest import WorkoutPlan
+from formwork import Spec, Violation, generated, rule, soft
 
 
 class Shapes(Spec):

@@ -6,6 +6,7 @@ from typing import Annotated
 
 import pytest
 
+from conftest import WorkoutPlan
 from formwork import (
     ConstraintError,
     Session,
@@ -17,7 +18,6 @@ from formwork import (
     rule,
 )
 from formwork.providers import Always, AsyncAdapter, Recording, Scripted
-from conftest import WorkoutPlan
 
 VALID = {
     "exercises": [

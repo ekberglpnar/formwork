@@ -11,31 +11,29 @@ rather than to "the library":
     own-targeted  own ON  · targeted      · —          · no repairs   → targeting
     formwork      own ON  · targeted      · —          · repairs ON   → repairs
 
-An earlier version had ``own-only`` with declared repairs enabled, which made
-the ownership row differ in two factors at once: a declared repair fires
-*within* an attempt, so it is live even at one attempt. The fairness tests
-caught it. Both single-attempt arms now have repairs off.
+Both single-attempt arms have declared repairs off. A declared repair fires
+*within* an attempt, so leaving it on would make the ownership row differ in
+two factors at once.
 
 The two ownership-off arms share a prompt with the rest, differing only in the
-section that delivers the constraints. That is deliberate. A baseline with
-deliberately worse prose would measure my writing, not the mechanism.
+section that delivers the constraints. A baseline with deliberately worse prose
+would measure the prompt, not the mechanism.
 """
 
 from __future__ import annotations
 
-import time
 from dataclasses import dataclass, field
 from typing import Any
 
-from pydantic import BaseModel, ValidationError
+from pydantic import ValidationError
 
+from bench.errors import QuotaWall
+from bench.tasks import Task
 from formwork import ConstraintError, Session, StructuralError
 from formwork.prompt import PromptBuilder
 from formwork.providers.base import Model, ModelRequest, ProviderError
 from formwork.report import Usage
 from formwork.spec import Spec
-from bench.errors import QuotaWall
-from bench.tasks import Task
 
 
 @dataclass
@@ -189,7 +187,8 @@ def _run_restating(
     computed_values = spec.resolve_computed(ctx)
     base_prompt = prompts.initial(spec, ctx, computed_values)
     system = prompts.system(spec)
-    schema = _full_schema(spec)
+    # The whole object, computed fields included — the model produces all of it.
+    schema = spec
 
     prompt = base_prompt
     usage_total = Usage()
@@ -203,7 +202,6 @@ def _run_restating(
             kind="initial",
             fields=tuple(spec.model_fields),
         )
-        started = time.perf_counter()
         raw, usage = model.generate_structured(request)
         usage_total = usage_total + usage
         outcome.model_calls += 1
@@ -224,7 +222,6 @@ def _run_restating(
             + "\n".join(f"- {line}" for line in problems["messages"])
             + "\nReturn the whole object again, corrected."
         )
-        _ = time.perf_counter() - started
 
     outcome.prompt_tokens = usage_total.prompt_tokens
     outcome.completion_tokens = usage_total.completion_tokens
@@ -252,11 +249,6 @@ def _validate(spec: type[Spec], ctx: Any, raw: dict[str, Any]):
         },
         instance,
     )
-
-
-def _full_schema(spec: type[Spec]) -> type[BaseModel]:
-    """The whole object, computed fields included — the model produces all of it."""
-    return spec
 
 
 # ── registry ─────────────────────────────────────────────────────────────

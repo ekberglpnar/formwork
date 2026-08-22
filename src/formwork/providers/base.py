@@ -39,10 +39,6 @@ class ModelRequest:
     def is_repair(self) -> bool:
         return self.kind == "repair"
 
-    def json_schema(self) -> dict[str, Any]:
-        """Convenience for providers that take a raw JSON Schema."""
-        return self.schema.model_json_schema()
-
 
 @runtime_checkable
 class Model(Protocol):

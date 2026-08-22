@@ -20,7 +20,7 @@ field it cannot get wrong.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Sequence
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import StrEnum
 from typing import Any
@@ -126,19 +126,3 @@ def chosen(
 def generated(*, describe: str | None = None, max_items: int | None = None) -> FieldSpec:
     """The model is free within the type."""
     return FieldSpec(role=Role.GENERATED, describe=describe, max_items=max_items)
-
-
-def membership_failures(
-    values: Sequence[Any],
-    allowed: Sequence[Any],
-    *,
-    key: str | None = None,
-) -> list[Any]:
-    """Which of ``values`` are outside ``allowed``. Shared by rules and repairs."""
-    pool = set(allowed)
-    missing = []
-    for value in values:
-        probe = _read_source(value, key) if key else value
-        if probe not in pool:
-            missing.append(probe)
-    return missing

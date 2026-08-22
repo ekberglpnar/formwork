@@ -85,11 +85,10 @@ class WeeklyPlan(Spec):
     set_range: Annotated[
         tuple[int, int], computed(weekly_set_range, describe="total sets across the week")
     ]
-    # A live run against Gemini returned five movements where four were
-    # allowed, and it was right to: the rule text said "at most the configured
-    # number" without ever saying what the number was. If a limit matters to
-    # the model, it has to reach the model as a value, and a computed field is
-    # how values get there. Rule prose alone is not a constraint.
+    # If a limit matters to the model it has to reach the model as a value.
+    # Rule prose alone is not a constraint: "at most the configured number"
+    # says nothing without the number, and a computed field is how it gets
+    # there.
     max_movements: Annotated[
         int,
         computed(lambda p: p.max_per_day, describe="hard ceiling on the movement count"),

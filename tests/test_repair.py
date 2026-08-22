@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from formwork import Violation, repair
 from conftest import WorkoutPlan
+from formwork import Violation, repair
 
 VIOLATION = Violation(rule="whatever", message="...", fields=("exercises",))
 
