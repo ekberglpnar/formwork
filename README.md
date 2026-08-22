@@ -1,5 +1,10 @@
 # Formwork
 
+[![PyPI](https://img.shields.io/pypi/v/formwork.svg)](https://pypi.org/project/formwork/)
+[![Python](https://img.shields.io/pypi/pyversions/formwork.svg)](https://pypi.org/project/formwork/)
+[![CI](https://github.com/ekberglpnar/formwork/actions/workflows/ci.yml/badge.svg)](https://github.com/ekberglpnar/formwork/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 **Runtime semantic constraints and targeted repair for structured LLM output.**
 
 Formwork is a Python library for building more reliable structured-output workflows around LLMs.
