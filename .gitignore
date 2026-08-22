@@ -29,8 +29,10 @@ Thumbs.db
 .env.*
 !.env.example
 
-# Benchmark output is a local artifact, not part of the repo
-bench/results/
+# Benchmark output is a local artifact by default. Published runs — the ones the
+# README quotes — are committed explicitly so the numbers can be re-scored.
+bench/results/*
+!bench/results/pilot-*.jsonl
 
 # Local notes for coding assistants
 CLAUDE.md
