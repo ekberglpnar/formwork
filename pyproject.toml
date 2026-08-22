@@ -4,17 +4,17 @@ build-backend = "hatchling.build"
 
 [project]
 name = "formwork"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Declare which fields your rule engine owns and which the model may invent, then guarantee the domain rules hold."
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [{ name = "Ekber Gulpinar" }]
 keywords = ["llm", "structured-output", "constraints", "validation", "pydantic"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
@@ -31,6 +31,11 @@ live = ["formwork[gemini]", "python-dotenv>=1.0"]
 [project.urls]
 Homepage = "https://github.com/ekberglpnar/formwork"
 Issues = "https://github.com/ekberglpnar/formwork/issues"
+
+# Single source of truth for the version: __init__.py. Keeping it in both places
+# lets pip show and formwork.__version__ drift apart without anyone noticing.
+[tool.hatch.version]
+path = "src/formwork/__init__.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/formwork"]

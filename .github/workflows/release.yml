@@ -1,0 +1,60 @@
+name: release
+
+# Publishes to PyPI when a version tag is pushed.
+#
+# Authentication is Trusted Publishing (OIDC): PyPI is configured to accept
+# releases from this repository and workflow, so no API token is stored
+# anywhere. The publish job is the only place that gets id-token: write.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build
+        run: |
+          python -m pip install --upgrade pip build twine
+          python -m build
+          python -m twine check dist/*
+
+      # The tag is the release's only input, and nothing else checks that it
+      # agrees with the package. Tagging v0.2.0 while __init__.py still says
+      # 0.1.0 would otherwise publish 0.1.0 under a 0.2.0 tag, once, forever.
+      # The tag reaches the shell through the environment, never interpolated.
+      - name: Tag must match the package version
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          BUILT=$(ls dist/*.tar.gz | sed -E 's|.*/formwork-(.*)\.tar\.gz|\1|')
+          echo "tag=${TAG#v}  built=$BUILT"
+          test "${TAG#v}" = "$BUILT"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
