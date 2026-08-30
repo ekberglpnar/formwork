@@ -1,0 +1,37 @@
+name: Feature request
+description: Propose a capability Formwork does not have yet
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The README's roadmap lists what is already planned — provider adapters,
+        grammar-backed `chosen` fields, larger benchmarks, more repair
+        strategies. If your idea is one of those, an issue describing your
+        concrete use case still helps to prioritise it.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: >
+        What are you trying to do, and where does Formwork make it awkward or
+        impossible today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would like instead
+      description: >
+        A sketch of the API you have in mind, if you have one. Rough is fine.
+      render: python
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What you tried instead
+      description: >
+        Working around it in application code, a different library, a custom
+        rule — knowing the workaround tells us how much the gap costs.
