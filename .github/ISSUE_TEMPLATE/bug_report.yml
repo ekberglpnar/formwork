@@ -1,0 +1,66 @@
+name: Bug report
+description: Something behaves differently from what the README describes
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. The most useful thing you can include is a spec
+        small enough to paste — field roles and rules are usually where the
+        surprise lives.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you expected, and what you got instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: >
+        A minimal spec and the call that fails. `Scripted` or `Chaos` from
+        `formwork.providers.fake` lets you reproduce provider behaviour without
+        a network call or an API key.
+      render: python
+    validations:
+      required: true
+
+  - type: textarea
+    id: traceback
+    attributes:
+      label: Traceback or report
+      description: >
+        The full traceback if it raised. If it did not raise, the `Report` for
+        the run is just as useful — it shows the attempts and the violations.
+      render: text
+
+  - type: input
+    id: version
+    attributes:
+      label: Formwork version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: python-version
+    attributes:
+      label: Python version
+      placeholder: "3.12"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Provider
+      options:
+        - fake (Scripted / Chaos / Recording)
+        - Gemini
+        - a provider of my own
+    validations:
+      required: true

@@ -1,0 +1,10 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question about using Formwork
+    url: https://github.com/ekberglpnar/formwork/discussions/categories/q-a
+    about: >
+      How to model a constraint, when to use a computed field, why a repair did
+      not fire — ask in Q&A rather than opening an issue.
+  - name: Report a security vulnerability
+    url: https://github.com/ekberglpnar/formwork/security/advisories/new
+    about: Report privately through a security advisory, not a public issue.
