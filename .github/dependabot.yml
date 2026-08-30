@@ -1,0 +1,27 @@
+version: 2
+
+updates:
+  # Pinned action versions go stale quietly and are a supply-chain surface,
+  # so they are checked on their own schedule rather than with the Python deps.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: "ci"
+
+  # Only the dev extra moves here in practice: the single runtime dependency is
+  # Pydantic 2, deliberately declared with a wide range. Grouped into one pull
+  # request a month because these updates are tooling noise until CI fails.
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: monthly
+    groups:
+      dev-dependencies:
+        patterns: ["*"]
+    commit-message:
+      prefix: "deps"

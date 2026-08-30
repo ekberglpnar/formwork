@@ -1045,6 +1045,9 @@ python -m venv .venv
 The only runtime dependency is Pydantic 2. Formwork is developed and tested
 against Python 3.11, 3.12 and 3.13.
 
+The checks a change has to pass, and the invariants it must not break, are in
+[CONTRIBUTING.md](CONTRIBUTING.md).
+
 ---
 
 # Design principles
@@ -1175,6 +1178,22 @@ If you need a focused runtime built specifically around:
 - targeted regeneration
 
 Formwork is designed for that problem.
+
+---
+
+# Contributing and support
+
+- **Questions about modelling a constraint** — how to decide whether a field is
+  computed or generated, why a repair did not fire — belong in
+  [Q&A discussions](https://github.com/ekberglpnar/formwork/discussions/categories/q-a).
+- **Bugs and feature requests** go to
+  [issues](https://github.com/ekberglpnar/formwork/issues). A bug report is much
+  easier to act on with the spec that failed and the `Report` it produced; the
+  fake providers reproduce most provider behaviour without an API key.
+- **Vulnerabilities** should be reported privately — see
+  [SECURITY.md](SECURITY.md).
+- **Pull requests** are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) describes
+  the setup, the three checks, and the properties that must survive a change.
 
 ---
 
